@@ -5,7 +5,8 @@ WITH merged_table AS (
         c.visitor_id AS visitor_id,
         c.date_time AS communication_date_time,
         s.visitor_session_id AS visitor_session_id,
-        LEAD(s.date_time) over(PARTITION BY c.communication_id ORDER BY(s.date_time)) AS session_date_time,
+        s.date_time AS session_date_time,
+        -- LAG(s.date_time) over(PARTITION BY c.communication_id ORDER BY(s.date_time)) AS session_date_time,
         s.campaign_id AS campaign_id,
         ROW_NUMBER() over(PARTITION BY c.communication_id ORDER BY (s.date_time)) AS row_n
     FROM
@@ -15,8 +16,8 @@ WITH merged_table AS (
     ON
         c.visitor_id = s.visitor_id
     WHERE
-        c.site_id = s.site_id AND
-        c.date_time > s.date_time
+        c.site_id = s.site_id 
+        AND c.date_time > s.date_time
     ORDER BY
         communication_id
     )
@@ -37,10 +38,11 @@ SELECT
 FROM
     merged_table AS mt
 LEFT JOIN    
-    (SELECT
-    communication_id,
-    MAX(row_n) AS max_n,
-    MAX(session_date_time) AS session_date_time
+    (
+    SELECT
+        communication_id,
+        MAX(row_n) AS max_n,
+        MAX(session_date_time) AS session_date_time
     FROM
         merged_table
     GROUP BY
