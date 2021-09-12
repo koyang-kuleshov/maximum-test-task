@@ -103,10 +103,8 @@ class MaximumTask:
         merged_df.rename(
             {'communication': 'communication_id',
                 'site_id_com': 'site_id',
-                'visitor_id_x': 'visitor_id',
                 'date_time_com': 'communication_date_time',
                 'date_time_ses': 'session_date_time',
-                'communication_y': 'row_n'
              },
             axis='columns',
             inplace=True
@@ -127,7 +125,7 @@ class MaximumTask:
 
     def do_task_with_sql(self):
         '''Получает данные из БД, приводит к нужным типам данных.'''
-        psql = """
+        psql ='''
         WITH merged_table AS (
             SELECT
                 c.communication_id AS communication_id,
@@ -183,7 +181,7 @@ class MaximumTask:
             mt.communication_id = sr.communication_id
         WHERE
             mt.row_n = sr.max_n
-        """
+        '''
         execute_psql = self.execute_query(psql)
         self.result_psql = pd.DataFrame(
             execute_psql, columns=self.result_df.columns.to_list())
