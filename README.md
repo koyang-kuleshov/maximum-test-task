@@ -24,3 +24,20 @@
 В конечной таблице должны быть следующие поля: communication_id, site_id, visitor_id, communication_date_time, visitor_session_id, session_date_time, campaign_id, row_n (порядковый номер сессии этого пользователя в рамках этого сайта).
 
 Ожидается, что результаты решения обоими способами будут совпадать друг с другом - в качестве необязательного задания можете сравнить в pandas результаты, полученные двумя способами.
+
+### Запуск теста
+Для запуска нужно создать файл **env.sh** с данными для подкючения к серверу:
+
+export POSTGRES_HOST="hostname.ru"
+
+export POSTGRES_PORT="5432"
+
+export POSTGRES_DB="db_name"
+
+export POSTGRES_USER="username"
+
+export POSTGRES_PASS="password"
+
+Выполнить команду:
+
+`. env.sh && python3 test_task.py`
